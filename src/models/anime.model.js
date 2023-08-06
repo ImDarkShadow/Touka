@@ -1,45 +1,129 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-const bcrypt = require('bcryptjs');
-const { toJSON, paginate } = require('./plugins');
 const { string } = require('joi');
-
+const { toJSON, paginate } = require('./plugins');
+//
 const animeSchema = new mongoose.Schema({
-  slug: { type: String },
-  synopsis: { type: String },
-  titles: {
-    en: { type: String },
-    en_jp: { type: String },
-    ja_jp: { type: String },
+  mal_id: {
+    type: Number,
+    required: true,
+    unique: true,
   },
-  canonicalTitle: { type: String },
-  abbreviatedTitles: [{ type: String }],
-  averageRating: { type: String },
-  startDate: { type: Date },
-  endDate: { type: Date },
-  ageRating: {
-    type: String,
-    enum: ['G', 'PG', 'R', 'R18'],
+  images: {
+    jpg: {
+      image_url: String,
+    },
+    webp: {
+      image_url: String,
+    },
   },
-  ageRatingGuide: { type: String },
-  subtype: {
+  titles: Object,
+
+  type: {
     type: String,
-    enum: ['ONA', 'OVA', 'TV', 'movie', 'music', 'special'],
+    enum: ['TV', 'OVA', 'Movie', 'Special', 'ONA', 'Music'],
+    nullable: true,
+  },
+  source: {
+    type: String,
+    nullable: true,
+  },
+  episodes: {
+    type: Number,
+    nullable: true,
   },
   status: {
     type: String,
-    enum: ['current', 'finished', 'tba', 'unreleased', 'upcoming'],
+    enum: ['Finished Airing', 'Currently Airing', 'Not yet aired'],
+    nullable: true,
   },
-  posterImage: {
+  airing: Boolean,
+  aired: {
+    from: String,
+    to: String,
+  },
+  duration: {
     type: String,
+    nullable: true,
   },
-  coverImage: {
+  rating: {
     type: String,
+    enum: [
+      'G - All Ages',
+      'PG - Children',
+      'PG-13 - Teens 13 or older',
+      'R - 17+ (violence & profanity)',
+      'R+ - Mild Nudity',
+      'Rx - Hentai',
+    ],
+    nullable: true,
   },
-  episodeCount: { type: Number },
-  episodeLength: { type: Number },
-  youtubeVideoId: { type: String },
-  nsfw: { type: Boolean },
+  score: {
+    type: Number,
+    format: 'float',
+    nullable: true,
+  },
+  synopsis: {
+    type: String,
+    nullable: true,
+  },
+  season: {
+    type: String,
+    enum: ['summer', 'winter', 'spring', 'fall', null],
+    nullable: true,
+  },
+  year: {
+    type: Number,
+    nullable: true,
+  },
+
+  studios: [
+    {
+      mal_id: Number,
+      name: String,
+    },
+  ],
+  genres: [
+    {
+      mal_id: Number,
+      name: String,
+    },
+  ],
+  explicit_genres: [String],
+  themes: [
+    {
+      mal_id: Number,
+      name: String,
+    },
+  ],
+  demographics: [
+    {
+      mal_id: Number,
+      name: String,
+    },
+  ],
+  relations: [
+    {
+      relation: String,
+      entry: [
+        {
+          mal_id: Number,
+          name: String,
+        },
+      ],
+    },
+  ],
+  theme: {
+    openings: [String],
+    endings: [String],
+  },
+  external: [
+    {
+      name: String,
+      url: String,
+    },
+  ],
+  localPath: String,
 });
 
 const Anime = mongoose.model('Anime', animeSchema);
