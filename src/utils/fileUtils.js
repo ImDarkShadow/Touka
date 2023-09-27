@@ -18,8 +18,7 @@ const getFolders = async (animeFolder) => {
   await Promise.all(
     folderNames.map(async (folderName) => {
       const subFolderPath = path.join(animeFolder, folderName);
-      const subFolderNames = await getImmediateSubFolders(subFolderPath);
-      subFolderDetails[folderName] = subFolderNames;
+      subFolderDetails[folderName] = await getImmediateSubFolders(subFolderPath);
     }),
   );
   console.log(`subFolder Details${JSON.stringify(subFolderDetails)}`);
@@ -41,4 +40,11 @@ const getEpisodes = async (directoryPath) => {
   return filteredFileNames.filter((fileName) => fileName !== null);
 };
 
-module.exports = { getFolders, getEpisodes };
+const getAnimeJson = async (animePath) => {
+  console.log(animePath);
+  const fullPath = path.join(process.env.ANIME_FOLDER, animePath, 'animeDetails.json');
+  console.log(fullPath);
+  return fs.readFile(fullPath, 'utf-8');
+};
+
+module.exports = { getFolders, getEpisodes, getAnimeJson };

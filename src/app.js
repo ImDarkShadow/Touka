@@ -20,7 +20,7 @@ if (config.env !== 'test') {
   app.use(morgan.successHandler);
   app.use(morgan.errorHandler);
 }
-
+app.use('/v1/anime/', express.static('/home/pritam/Documents/Temp'));
 // set security HTTP headers
 app.use(helmet());
 

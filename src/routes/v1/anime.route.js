@@ -8,6 +8,9 @@ const router = express.Router();
 
 router.route('/').get(animeController.getAllAnime).post(animeController.createAnime);
 router.route('/updateAnime').get(animeController.updateAnime);
+router.route('/getAnime/:animeId').get(animeController.getAnime);
+router.route('/getAnime/:animeId/:episodeId').get(animeController.getEpisode);
+router.route('/ani').get(animeController.getEpisode);
 
 // router
 //   .route('/:animeId')
